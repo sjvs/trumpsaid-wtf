@@ -2,6 +2,8 @@ import PubSubController from './PubSubController';
 import { IPubSubConsumerFailedResponse, IPubSubConsumerPayload } from './PubSubHandler';
 export abstract class PubSubResponseHandler {
   pubSubController: PubSubController;
+  maxJobs: number = 1;
+  activeJobs: number = 0;
   constructor(pubSubController: PubSubController) {
     this.pubSubController = pubSubController;
   }
