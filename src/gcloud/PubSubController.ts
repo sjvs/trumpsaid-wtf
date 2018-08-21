@@ -1,7 +1,6 @@
 // tslint:disable-next-line:variable-name
 import PubSub, { Subscription, Topic } from '@google-cloud/pubsub';
 import logger from '../util/logger';
-import secrets, { ServerType } from '../util/secrets';
 import { IPubSubConsumerFailedResponse, IPubSubConsumerSuccessMessage, PubSubHandler } from './PubSubHandler';
 import { PubSubResponseHandler } from './PubSubResponseHandler';
 
@@ -23,7 +22,7 @@ abstract class PubSubController {
   responseHandler: PubSubResponseHandler;
   constructor() {
     this.pubsub = PubSub({
-      projectId: secrets.GOOGLE_PROJECT_ID,
+      projectId: process.env.GOOGLE_PROJECT_ID,
       keyFilename: 'gc-credentials.json',
     });
   }
@@ -35,14 +34,14 @@ abstract class PubSubController {
     this.responderSubscription = this.pubsub.subscription(this.topicSubcriptionNames.responderSubscriptionName);
   }
   protected addConsumerListener() {
-    if (secrets.SERVER_TYPE !== ServerType.WEB) {
+    if (process.env.SERVER_TYPE !== 'WEB') {
       const topic = this.topicSubcriptionNames.consumerTopicName;
       this.consumerSubscription.on('message', this.consumerHandler.requestHandler.bind(this.consumerHandler));
       logger.debug(`PubSub worker listening to ${topic}/${this.topicSubcriptionNames.consumerSubscriptionName}`);
     }
   }
   protected addResponseListener() {
-    if (secrets.SERVER_TYPE !== ServerType.WORKER) {
+    if (process.env.SERVER_TYPE !== 'WORKER') {
       const topic = this.topicSubcriptionNames.responderTopicName;
       this.responderSubscription.on('message', this.responseHandler.responseHandler.bind(this.responseHandler));
       logger.debug(`PubSub responder listening to ${topic}/${this.topicSubcriptionNames.consumerSubscriptionName}`);

@@ -17,7 +17,6 @@ import rootRouter from './routes/rootRouter';
 
 import checkJWT from './helpers/checkJWT';
 import logger from './util/logger';
-import secrets from './util/secrets';
 
 const app = express();
 
@@ -49,10 +48,10 @@ app.use(
 app.use(
   expressSession({
     store: new RedisStore({
-      host: secrets.REDIS_HOST,
-      port: secrets.REDIS_PORT,
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
     }),
-    secret: secrets.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: {
       expires: false,

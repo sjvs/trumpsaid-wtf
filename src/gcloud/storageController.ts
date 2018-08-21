@@ -5,10 +5,10 @@ import { mkdirSync } from 'mkdir-recursive';
 import moment from 'moment';
 import { VideoUploadStorageLink, VideoUploadStorageLinkCreateInput } from '../graphql/generated/prisma';
 import logger from '../util/logger';
-import secrets from '../util/secrets';
 
 export const storage = new Storage({
-  projectId: secrets.GOOGLE_PROJECT_ID,
+  projectId: process.env.GOOGLE_PROJECT_ID,
+  keyFilename: 'gc-credentials.json',
 });
 
 export const processingBucketName = 'ts-video-processing';

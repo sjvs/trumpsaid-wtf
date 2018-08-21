@@ -4,7 +4,6 @@ import { Strategy } from 'passport-auth0';
 import { User } from '../graphql/generated/prisma';
 import Prisma from '../graphql/prismaContext';
 import logger from '../util/logger';
-import secrets from '../util/secrets';
 
 export interface IRequestWithUser extends Request {
   user: User;
@@ -37,12 +36,12 @@ interface ILocalUser {
 
 const strategy = new Strategy(
   {
-    domain: secrets.AUTH0_DOMAIN,
-    clientID: secrets.AUTH0_CLIENT_ID,
-    clientSecret: secrets.AUTH0_SECRET,
-    callbackURL: secrets.AUTH0_CALLBACK_URL,
-    audience: secrets.AUTH0_AUDIENCE,
-    issuer: secrets.AUTH0_DOMAIN,
+    domain: process.env.AUTH0_DOMAIN,
+    clientID: process.env.AUTH0_CLIENT_ID,
+    clientSecret: process.env.AUTH0_SECRET,
+    callbackURL: process.env.AUTH0_CALLBACK_URL,
+    audience: process.env.AUTH0_AUDIENCE,
+    issuer: process.env.AUTH0_DOMAIN,
     responseType: 'code',
     scope: 'openid profile',
   },

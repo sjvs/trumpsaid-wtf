@@ -2,7 +2,6 @@ import redis from 'redis';
 import { exit } from 'shelljs';
 import prisma, { prismaEndpoint } from '../graphql/prismaContext';
 import logger from './logger';
-import secrets from './secrets';
 
 const connectionTimeout = 5000;
 
@@ -10,7 +9,7 @@ export const testServerConnections = () => {
   return Promise.all([
     testRedisConnection()
       .then((time) => {
-        logger.debug(`Redis client connected in ${time}ms (${secrets.REDIS_HOST}:${secrets.REDIS_PORT})`);
+        logger.debug(`Redis client connected in ${time}ms (${process.env.REDIS_HOST}:${process.env.REDIS_PORT})`);
       }),
     testPrismaConnection()
       .then((res: any) => {
@@ -26,8 +25,9 @@ export const testServerConnections = () => {
 export const testRedisConnection = () => {
   return new Promise((resolve, reject) => {
     const start = new Date().getMilliseconds();
-    const timeout = setTimeout(() => reject(new Error(`Redis connection timed out ${secrets.REDIS_HOST}:${secrets.REDIS_PORT}`)), connectionTimeout);
-    const client = redis.createClient(Number(secrets.REDIS_PORT), secrets.REDIS_HOST, {});
+    const timeout = setTimeout(
+      () => reject(new Error(`Redis connection timed out ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`)), connectionTimeout);
+    const client = redis.createClient(Number(process.env.REDIS_PORT), process.env.REDIS_HOST, {});
     client.ping(() => {
       clearTimeout(timeout);
       const end = new Date().getMilliseconds();

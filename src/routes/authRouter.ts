@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
 import logger from '../util/logger';
-import secrets from '../util/secrets';
 
 // Base route is /
 const router = Router();
@@ -19,10 +18,10 @@ interface IAuth0PassportConfig {
 router.get(
   '/login',
   passport.authenticate('auth0', {
-    clientId: secrets.AUTH0_CLIENT_ID,
-    domain: secrets.AUTH0_DOMAIN,
-    redirectUri: secrets.AUTH0_CALLBACK_URL,
-    audience: secrets.AUTH0_AUDIENCE,
+    clientId: process.env.AUTH0_CLIENT_ID,
+    domain: process.env.AUTH0_DOMAIN,
+    redirectUri: process.env.AUTH0_CALLBACK_URL,
+    audience: process.env.AUTH0_AUDIENCE,
     responseType: 'code',
     scope: 'openid profile',
   } as IAuth0PassportConfig),

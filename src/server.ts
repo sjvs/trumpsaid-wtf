@@ -1,9 +1,14 @@
+
+import { config } from 'dotenv-safe';
+
+config();
+require('@google-cloud/trace-agent').start();
 require('newrelic');
+
 import errorhandler from 'errorhandler';
 import app from './app';
 import logger from './util/logger';
 import checkNativeDependencies from './util/nativeDependencies';
-import secrets, { ServerType } from './util/secrets';
 import testRemoteConnections from './util/testRemoteConnections';
 
 let server;
@@ -23,7 +28,7 @@ const startServer = async () => {
   });
 };
 
-if (secrets.SERVER_TYPE !== ServerType.WORKER) {
+if (process.env.SERVER_TYPE !== 'WORKER') {
 // tslint:disable-next-line:no-floating-promises
   startServer();
 }

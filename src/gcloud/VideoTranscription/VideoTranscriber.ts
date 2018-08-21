@@ -4,14 +4,13 @@ import * as mm from 'music-metadata/lib';
 import { ConversationBlockCreateInput, VideoConversationCreateInput, VideoUpload, VideoUploadStorageLink } from '../../graphql/generated/prisma';
 import prisma from '../../graphql/prismaContext';
 import logger from '../../util/logger';
-import secrets from '../../util/secrets';
 import { writeToVideoUploadLog } from '../../util/videoUploadLogger';
 import { getFileSize, getReadStream } from '../storageController';
 
 const speech = require('@google-cloud/speech').v1p1beta1;
 
 const client = new speech.SpeechClient({
-  projectId: secrets.GOOGLE_PROJECT_ID,
+  projectId: process.env.GOOGLE_PROJECT_ID,
   keyFilename: 'gc-credentials.json',
 });
 
