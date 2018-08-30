@@ -32,7 +32,7 @@
     "redis": "^2.8.0",
     "shelljs": "^0.8.2",
     "tslib": "^1.9.3",
-    "winston": "^2.4.4"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "@types/winston": "^2.4.4"
